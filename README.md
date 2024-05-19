@@ -1,4 +1,4 @@
-![image](https://github.com/Wong4j/TE-FAQ/assets/21985950/5522b29c-fab5-45cf-bfde-e9f34525cd7d)# TE-FAQ
+# TE-FAQ
 收集Transformer Engine(TE)测试常见的问题和注意事项
 
 
