@@ -67,13 +67,13 @@ PaddleNLP+TE的测试方法参考https://github.com/Wong4j/PaddleNLP/blob/jaywan
 ### 训练脚本和配置
 
 ### 收敛性测试
-Q: FP8 recipe如何设置？
+Q: FP8 recipe如何设置？    
 A: 目前PaddleNLP的分支中默认设置amax_history_len=1024，algo=max，是推荐的训练配置，收敛性测试时可不做修改。(NeMo的某些yaml中会默认设定amax_history_len=1，amax_algo=most_recent)。
 
-Q: 训练开启TE和不开TE的曲线下降趋势不同
+Q: 训练开启TE和不开TE的曲线下降趋势不同    
 A: 目前PaddleNLP中对TE layer的参数初始化可能没有完全对齐非TE的layer，所以冷启动会出现TE和非TE的loss曲线不太吻合。解决办法是用[README_TE](https://github.com/Wong4j/PaddleNLP/blob/jaywan/te_integration/llm/llama/README_TE.md)中的checkpoint converter。先不开TE，训练一步，保存ckpt，然后转成TE的ckpt。将两份ckpt分别保存在两个目录中，作为初始的weight来热启动训练，这样就能完全对齐初始化weight，loss曲线可以几乎完全吻合。
 
-Q: checkpoint converter可以分布式跑吗？
+Q: checkpoint converter可以分布式跑吗？    
 A: 不行，只是一个单线程的Python脚本。PaddleNLP的分布式训练ckpt默认会保存在同一个目录下，有多个`.pdparams`和`.opt`等文件，ckpt converter仅处理后缀为`.pdparams`的文件，将所有的参数转成TE对应的参数名，并对其中特定的参数做转置等变换，然后保存到另一个目录中。注意，不同的并行配置，其ckpt不能通用，比如pipeline parallel=4，那么目录下会有4个后缀为`.pdparams`的文件，分别是`model_state.pp00.pdparams, model_state.pp01.pdparams, ...`，如果下次训练不再使用pipeline parallel=4，就必须重新处理ckpt。
 
 
