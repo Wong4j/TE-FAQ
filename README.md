@@ -48,7 +48,7 @@ A: NeMO是调用的Apex中的[DistributedFusedAdam](https://github.com/NVIDIA/ap
 Q: 如何profile？   
 A: 若是用NeMo-Framework-Launcher的main.py启动，直接在yaml中设置`nsys_profile.enabled=True`。若是手动跑megatron_gpt_pretraining.py，需要在命令中加上nsys profile的命令，比如`CUDA_DEVICE_MAX_CONNECTIONS=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 nsys profile -s none -t nvtx,cuda -o /path/to/output --force-overwrite true --capture-range=cudaProfilerApi --capture-range-end=stop python3 -u /path/to/megatron_gpt_pretraining.py  --config-path=xxx  --config-name=xxx`
 
-Q: 如何确认是否成功开启TE?
+Q: 如何确认是否成功开启TE?    
 A: 用nsys profile看是否有TE的kernel，比如FP8的gemm kernel。
 
 Q: 无SLURM/K8S环境如何进行跑多卡测试？   
